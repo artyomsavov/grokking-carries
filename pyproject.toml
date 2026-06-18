@@ -1,0 +1,21 @@
+[project]
+name = "grokking-carries"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "einops>=0.8.2",
+    "jaxtyping>=0.3.11",
+    "numpy>=2.4.6",
+    "scikit-learn>=1.9.0",
+    "torch>=2.12.1",
+    "tqdm>=4.68.3",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+    "matplotlib>=3.11.0",
+    "wandb>=0.27.2",
+]
