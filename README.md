@@ -6,16 +6,33 @@
 
 ```text
 grokking-carries/
-├── notebooks/                  # Jupyter-ноутбуки для SVD, Logit Lens и визуализаций
-├── scripts/                    # Исполняемые скрипты (pipeline)
-│   ├── 01_generate_data.py     
-│   └── 02_run_training.py      
-└── src/grokking_carries/
-    ├── config.py               # Единый конфигуратор (архитектура, гиперпараметры, device)
-    ├── data/                   # Генератор CoT-датасета и character-level токенизатор
-    ├── model/                  # Архитектура трансформера, спроектированная под систему хуков
-    ├── training/               # Цикл обучения с частым чекпоинтингом для отлова grokking
-    └── interpretability/       # Инфраструктура извлечения/подмены активаций и атрибуции
+├── pyproject.toml
+├── uv.lock
+├── README.md
+├── notebooks/                  # Jupyter ноутбуки для исследовательского анализа (SVD, Logit Lens)
+├── scripts/                    # Точки входа для запуска пайплайнов
+│   ├── 01_generate_data.py
+│   └── 02_run_training.py
+└── src/
+    └── grokking_carries/
+        ├── __init__.py
+        ├── config.py           # Единый файл с гиперпараметрами (размер словаря, d_model, слои)
+        ├── data/
+        │   ├── __init__.py
+        │   ├── generator.py    # Скрипт генерации 250k примеров сложения/вычитания
+        │   └── tokenizer.py    # Character-level токенизатор + маппинг спецтокенов (<c0>, <b1> и т.д.)
+        ├── model/
+        │   ├── __init__.py
+        │   ├── transformer.py  # Сборка трансформера с поддержкой хуков
+        │   └── components.py   # Отдельные классы: Attention, MLP, Positional Encoding
+        ├── training/
+        │   ├── __init__.py
+        │   └── engine.py       # Цикл обучения (train_step, eval_step), логирование
+        └── interpretability/
+            ├── __init__.py
+            ├── hooks.py        # Инфраструктура для извлечения/подмены активаций
+            ├── probing.py      # Линейные классификаторы для скрытых состояний
+            └── attribution.py  # Integrated Gradients и логика для Logit Lens
 
 ```
 
