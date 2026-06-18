@@ -1,6 +1,7 @@
 import torch
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True, slots=True)
 class ModelConfig:
     n_layers: int = 4
@@ -12,6 +13,14 @@ class ModelConfig:
     
     # Автоопределение устройства (AMD CPU локально / Nvidia GPU на сервере)
     device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    @property
+    def d_head(self) -> int:
+        assert self.d_model % self.n_heads == 0, 'd_model must be divisible by n_heads'
+        return self.d_model // self.n_heads
+        
+    def to_device(self, new_device: str) -> 'ModelConfig':
+        return replace(self, device=new_device)
 
 @dataclass(frozen=True, slots=True)
 class TrainConfig:

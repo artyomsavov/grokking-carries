@@ -15,3 +15,11 @@ data/
 checkpoints/
 wandb/
 .env
+
+# Vim
+# Swap-файлы (блокировки и автосохранения)
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-z]
+*.sww
