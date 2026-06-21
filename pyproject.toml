@@ -1,9 +1,13 @@
 [project]
 name = "grokking-carries"
 version = "0.1.0"
-description = "Add your description here"
+description = "Mechanistic interpretability of arithmetic in transformers"
 readme = "README.md"
 requires-python = ">=3.12"
+authors = [
+    { name = "Михаил Мишин", email = "m.mishin@innopolis.university" },
+    { name = "Артём Савов" , email = "a.savov@innopolis.university" }
+]
 dependencies = [
     "einops>=0.8.2",
     "jaxtyping>=0.3.11",
