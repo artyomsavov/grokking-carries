@@ -1,3 +1,4 @@
+import re
 import torch
 from typing import Sequence
 from grokking_carries.types import TokenIndices
@@ -55,3 +56,27 @@ class ArithmeticTokenizer:
             decoded_batch.append(" ".join(tokens))
             
         return decoded_batch
+
+class MathTokenizer:
+    def __init__(self):
+        # 10 цифр + 4 спецсимвола + 4 CoT + 1 pad = 19 токенов (как в ModelConfig)
+        self.vocab = [str(i) for i in range(10)] + ['+', '-', '=', ' ', '<c0>', '<c1>', '<b0>', '<b1>', '<pad>']
+        self.v2i = {v: i for i, v in enumerate(self.vocab)}
+        self.i2v = {i: v for i, v in enumerate(self.vocab)}
+        self.pad_token_id = self.v2i['<pad>']
+        self.vocab_size = len(self.vocab)
+
+    def encode(self, text: str, from_split: bool = False) -> list[int]:
+        """
+        Если from_split=True, разбиваем по пробелам (как при обучении).
+        Если False, используем регулярное выражение для сохранения пробелов (инференс).
+        """
+        if from_split:
+            tokens = text.split()
+        else:
+            # Регулярка для вытаскивания CoT токенов целиком, либо отдельных символов
+            tokens = re.findall(r'<[cb][01]>|<pad>|\d|\+|-|=| ', text)
+        return [self.v2i[t] for t in tokens if t in self.v2i]
+
+    def decode(self, ids: list[int]) -> str:
+        return " ".join([self.i2v[i] for i in ids])
