@@ -99,8 +99,10 @@ class TransformerBlock(nn.Module):
         self.attn = Attention(cfg)
         self.ln2 = nn.LayerNorm(cfg.d_model)
         self.mlp = MLP(cfg)
+        self.hook_resid_post = HookPoint()
 
     def forward(self, x: HiddenStates) -> HiddenStates:
         x = x + self.attn(self.ln1(x))
         x = x + self.mlp(self.ln2(x))
+        x = self.hook_resid_post(x)
         return x
